@@ -20,7 +20,7 @@ def get_one_document():
 @app.route('/updateDatabase', methods=['POST'])
 def update_one_database():
     data = request.get_json()
-    update_database(data['id'], data['role'], data['response'])
+    update_database(data['id'], data['role'], data['response'], name=data['name'])
     return jsonify({"message": "Success"})
 
 

@@ -1,6 +1,8 @@
 from pymongo import MongoClient
 import random
-
+#lock
+from threading import Lock
+lock = Lock()
 random.seed = 42
 
 client = MongoClient('mongodb://localhost:27017/')
@@ -12,7 +14,7 @@ ids = [doc["_id"] for doc in collection.find({}, {"_id": 1})]
 random.shuffle(ids)
 
 
-def update_database(_id, role, result):
+def update_database(_id, role, result, name='匿名'):
     # 设置要更新的路径
     document = collection.find_one({"_id": _id})
     ai_path = "{}.ai.{}".format(role, document[role]["idx"])
@@ -27,6 +29,9 @@ def update_database(_id, role, result):
         },
         upsert=True
     )
+    with lock:
+        with open('contributor.txt', 'w') as file:
+            file.write(name+' '+result+' '+_id)
 
 
 def get_document(index):

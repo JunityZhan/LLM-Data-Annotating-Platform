@@ -3,7 +3,7 @@
         <div class="card-body justify-center">
             <h2 class="card-title ">这个角色是: {{ data.role }}</h2>
             <div class="flex justify-center">
-                <input type="text" placeholder="输入你的名字（选填）你不仅有机会出现在模型发布的致谢名单内，还可以抢先体验模型。" class="input w-full" />
+                <input v-model="data.name" type="text" placeholder="输入你的名字（选填）你不仅有机会出现在模型发布的致谢名单内，还可以抢先体验模型。" class="input w-full" />
             </div>
             <div class="flex flex-col w-full border-opacity-50">
                 <div class="divider">上下文</div>
@@ -52,6 +52,7 @@ let data = reactive({
     sample: "这是一个样例回答",
     response: "",
     idx: -1,
+    name: "",
     })
 function getDocument() {
   getRequest('/api/getDocument').then((res) => {
@@ -98,7 +99,7 @@ function deny() {
 }
 
 function finish() {
-  postRequest('/api/updateDatabase', {'id': data.id, 'role': data.role, 'response': data.response}).then((res) => {
+  postRequest('/api/updateDatabase', {'id': data.id, 'role': data.role, 'response': data.response, 'name': data.name}).then((res) => {
     console.log(res);
   })
   getDocument();
