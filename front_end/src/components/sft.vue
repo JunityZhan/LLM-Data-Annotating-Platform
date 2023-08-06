@@ -36,7 +36,7 @@
                 <label class="label">
                     <span class="label-text">把你的回答写在这里，请务必认真回答，如果不想做这个角色，请点击拒绝，请求下一个问题。</span>
                 </label>
-                <textarea type="text" placeholder="请输入问题的答案" class="textarea textarea-lg textarea-bordered w-full" v-model="data.response"/>
+                <textarea type="text" placeholder="请输入问题的答案" class="textarea w-full min-h-[200px] textarea-bordered" v-model="data.response"/>
             </div>
         </div>
     </div>
@@ -55,6 +55,7 @@ let data = reactive({
     name: "",
     })
 function getDocument() {
+  data.response = "";
   getRequest('/api/getDocument').then((res) => {
     let document = res.data;
     const keys = Object.keys(document).filter(key => key !== "_id" && key !== "idx");
@@ -91,7 +92,8 @@ function report()
 {
   postRequest('/api/report', {'id': data.id, 'role': data.role}).then((res) => {
     console.log(res);
-  })
+  });
+  getDocument();
 }
 
 function deny() {
